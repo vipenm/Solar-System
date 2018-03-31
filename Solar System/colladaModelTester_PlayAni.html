@@ -1,0 +1,51 @@
+<!-- three.js Demo - Loading a 3D Model. Collada file format and play animation. -->
+<!-- Additional Notes: Uses separate .js and .xml files. -->
+<!-- Version: 3.0 -->
+
+<!DOCTYPE html>
+
+<html>
+	<head>
+    	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+
+		<title>three.js Demo - Loading a 3D Model. 
+											Collada File Format. Play animations.</title>
+
+		<!-- Here we include the three.js JavaScript files. -->
+		<script type="text/javascript" src="three.min.js"></script>
+		<!-- Here we include the three.js stats library. -->
+		<script type="text/javascript" src="stats.min.js"></script>
+		<!-- Here we include the three.js fly controls library. -->
+		<script type="text/javascript" src="FirstPersonControls.js"></script>
+
+		<!-- Include the three.js libraries to handle the animations. -->
+		<script src="Animation.js"></script>
+		<script src="AnimationHandler.js"></script>
+		<script src="KeyFrameAnimation.js"></script>
+		
+		<!-- Here we include the three.js Collada Model loader. -->
+		<script type="text/javascript" src="ColladaLoader.js"></script>
+
+		<!-- Here we include the our JavaScript files. You can include multiple files. -->
+		<!-- The files can have any name. -->
+		<script type="text/javascript" src="myJavaScriptFile.js"></script>
+	</head>
+
+	<body bgcolor="White">
+		
+		<div id="myDivContainer" style="position: absolute; top: 10px; left: 10px;">
+
+		</div> 
+
+		<div id="debugInfo" style="position: relative; top: 4px; 
+										left: 820px; width: 480px; background: Olive;">
+			<!-- You could put some default text here. -->
+		</div>
+
+		<div id="debugInfo1" style="position: relative; top: 50px; 
+										left: 820px; width: 480px; background: Olive;">
+			<!-- You could put some default text here. -->
+		</div>
+
+	</body>
+</html> 
