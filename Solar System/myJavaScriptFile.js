@@ -53,6 +53,18 @@ var keyFrameAnimationsLength = 0;
 // Used to control animation looping.
 var lastFrameCurrentTime = [];
 
+var interactRaycaster;
+
+var debugObjectName;
+
+var objectName
+
+var objectDetails;
+
+var interactObjects = [];
+
+var mouse = new THREE.Vector2(), INTERSECTED;
+
 // Initialise three.js.
 function init() {
 	// Renderer.
@@ -103,7 +115,8 @@ function init() {
 
 	// Set the position of the camera.
 	// The camera starts at 0,0,0 ...so pull it back.
-	camera.position.set(0, 3, 30);
+	camera.position.set(-250, 3, 30);
+	camera.rotation.x = 90 * (Math.PI / 180);
 
 	// Set up the camera controls.
 	controls = new THREE.FirstPersonControls( camera, 
@@ -111,6 +124,8 @@ function init() {
 	controls.movementSpeed = 200;
 	controls.lookSpeed = 0.06;
 	controls.activeLook = false;
+
+	interactRaycaster = new THREE.Raycaster();
 
 	// Start the scene.
 	// ----------------
@@ -175,12 +190,22 @@ function initScene() {
 			// Add the model to the scene.
 			scene.add( myDaeFile );
 
+			interactObjects.push( myDaeFile );
+
 			// Start the animations.
 			startAnimations();
 
 			// Start rendering the scene.
 			render();
 		} );
+}
+
+function onMouseMove( event ) {
+
+	// Calculate mouse position in normalized device coordinates.
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
 }
 
 // Start the animations.
@@ -211,6 +236,59 @@ function loopAnimations(){
  
 // The game timer (aka game loop). Called x times per second.
 function render(){
+
+	interactRaycaster.setFromCamera( mouse, camera )
+
+	var interactIntersections = interactRaycaster.intersectObjects( interactObjects, true );
+
+	if ( interactIntersections.length > 0 ) {
+
+		// Calculate world position of objects.
+		interactIntersections[0].object.geometry.computeBoundingBox();
+
+		var boundingBox = interactIntersections[0].object.geometry.boundingBox;
+
+		var position = new THREE.Vector3();
+		position.subVectors( boundingBox.max, boundingBox.min );
+		position.multiplyScalar( 0.5 );
+		position.add( boundingBox.min );
+
+		position.applyMatrix4( interactIntersections[0].object.matrixWorld );
+
+		// Calculate distance from camera to object.
+		//if ( camera.position.distanceTo(position) <= 20 ) {
+
+			if ( INTERSECTED != interactIntersections[0].object ) {
+
+				// If intersecting with valid object, change color of material.
+				//if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+
+				INTERSECTED = interactIntersections[0].object;
+				//INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+				//INTERSECTED.material.emissive.setHex( 0xbf8200 );
+
+				debugObjectName = interactIntersections[0].object.parent.name;
+
+				objectName = interactIntersections[0].object.parent.parent.name;
+
+				objectDetails = interactIntersections[0].object.parent.parent.userData.info;
+			}
+		//} 
+	} else {
+
+		// Revert color change when no longer hovering over object.
+		if ( INTERSECTED ) {
+			//INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+		}
+		
+		INTERSECTED = null;
+		objectName = "";
+		objectDetails = "";
+
+	}
+
+	document.getElementById("debugInfo").innerHTML = "Debug info: <br>" + "<br>Name = " + debugObjectName + "<br>";
+
 	// Here we control how the camera looks around the scene.
 	controls.activeLook = false;
 	if(mouseOverCanvas){
@@ -226,7 +304,7 @@ function render(){
 	controls.update( deltaTime );
 
 	//Debug information. This requires a div in your HTML. E.g. where id=debugInfo.
-	document.getElementById("debugInfo").innerHTML = "Debug info: <br>" + 
+	document.getElementById("debugInfo").innerHTML = "Debug info: <br>" + "<br>Name = " + debugObjectName +
 		"<br>keyFrameAnimationsLength = " + keyFrameAnimationsLength + ".<br>" +
 		"<br>keyFrameAnimations[0] = " + keyFrameAnimations[0].currentTime + ".<br>" +
 		"<br>lastCurrentTime[0] = " + lastFrameCurrentTime[0] + ".<br>";
@@ -246,6 +324,10 @@ function render(){
 	// Render the scene.
 	renderer.render(scene, camera);
 
+	window.addEventListener( 'mousemove', onMouseMove, false );
+
+	window.addEventListener( 'resize', onWindowResize, false );
+
 	// Update the stats.s
 	stats.update();
 
@@ -260,4 +342,14 @@ function render(){
     for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
     	lastFrameCurrentTime[i] = keyFrameAnimations[i].currentTime;
     }
+}
+
+// Allow window resizing
+function onWindowResize(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
 }
