@@ -16,7 +16,7 @@
 		<!-- Here we include the three.js stats library. -->
 		<script type="text/javascript" src="stats.min.js"></script>
 		<!-- Here we include the three.js fly controls library. -->
-		<script type="text/javascript" src="FirstPersonControls.js"></script>
+		<script type="text/javascript" src="OrbitControls.js"></script>
 
 		<!-- Include the three.js libraries to handle the animations. -->
 		<script src="Animation.js"></script>
@@ -29,6 +29,9 @@
 		<!-- Here we include the our JavaScript files. You can include multiple files. -->
 		<!-- The files can have any name. -->
 		<script type="text/javascript" src="myJavaScriptFile.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="stye.css">
+
 	</head>
 
 	<body bgcolor="White">
@@ -37,15 +40,35 @@
 
 		</div> 
 
-		<div id="debugInfo" style="position: relative; top: 4px; 
+		<!--<div id="debugInfo" style="position: relative; top: 4px; 
 										left: 100px; width: 480px; background: Olive;">
-			<!-- You could put some default text here. -->
+			 You could put some default text here. 
 		</div>
 
 		<div id="debugInfo1" style="position: relative; top: 50px; 
 										left: 820px; width: 480px; background: Olive;">
-			<!-- You could put some default text here. -->
+			 You could put some default text here.
+		</div>-->
+
+	<div id="nav" style="position: relative; top: 20%; left: 1%; width: 5%; padding-top: 1%;">
+		
+	<ul class="nav flex-column" style="width: 5%;">
+  <li class="nav-item">
+    <a class="nav-link active" href="#" onclick="earthFocus()">Earth</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Link</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Link</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#">Disabled</a>
+  </li>
+</ul>
 		</div>
+
+		<div id = "description"><p>HELLO</p></div>
 
 	</body>
 </html> 

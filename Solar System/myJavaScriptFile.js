@@ -6,8 +6,8 @@
 window.onload = init;
 
 // set the size of our canvas / view onto the scene.
-var WIDTH = window.innerWidth;
-var HEIGHT = window.innerHeight;
+var WIDTH = window.innerWidth - 50;
+var HEIGHT = window.innerHeight -50;
 
 // set camera properties / attributes.
 var VIEW_ANGLE = 45;
@@ -33,9 +33,7 @@ var mouseDown;
 // Manages controls.
 var controls;
 
-// Stores graphical meshes.
-var seaMesh;
-var landMesh;
+var planet;
 
 // Stores variables for Animation and 3D model.
 // Stores the model loader.
@@ -53,17 +51,7 @@ var keyFrameAnimationsLength = 0;
 // Used to control animation looping.
 var lastFrameCurrentTime = [];
 
-var interactRaycaster;
-
-var debugObjectName;
-
-var objectName
-
-var objectDetails;
-
-var interactObjects = [];
-
-var mouse = new THREE.Vector2(), INTERSECTED;
+const description = document.querySelector("#description");
 
 // Initialise three.js.
 function init() {
@@ -85,20 +73,20 @@ function init() {
 	renderer.setClearColor("rgb(0,0,0)");
 
 	// Add an event to set if the mouse is over our canvas.
-	renderer.domElement.onmouseover=function(e){ mouseOverCanvas = true; }
+	/*renderer.domElement.onmouseover=function(e){ mouseOverCanvas = true; }
 	renderer.domElement.onmousemove=function(e){ mouseovercanvas = true; }
 	renderer.domElement.onmouseout=function(e){ mouseOverCanvas = false; }
 
 	renderer.domElement.onmousedown=function(e){ mouseDown = true; }
-	renderer.domElement.onmouseup=function(e){ mouseDown = false; }
+	renderer.domElement.onmouseup=function(e){ mouseDown = false; }*/
 
 	// Stats.
 	// ------
-	stats = new Stats();
+	/*stats = new Stats();
 	stats.domElement.style.position = 'absolute';
 	stats.domElement.style.top = '0px';
 	stats.domElement.style.zIndex = 100;
-	docElement.appendChild( stats.domElement );
+	docElement.appendChild( stats.domElement );*/
 
 	// Scene.
 	// ------
@@ -112,20 +100,19 @@ function init() {
 	// Create a WebGl camera.
 	camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT_RATIO, 
 								NEAR_CLIPPING_PLANE, FAR_CLIPPING_PLANE);
-
+	
 	// Set the position of the camera.
-	// The camera starts at 0,0,0 ...so pull it back.
-	camera.position.set(-250, 3, 30);
-	camera.rotation.x = 90 * (Math.PI / 180);
 
-	// Set up the camera controls.
-	controls = new THREE.FirstPersonControls( camera, 
+	//camera.position.set(-150, 0, -40);
+
+	controls = new THREE.OrbitControls( camera, 
 									document.getElementById('myDivContainer') );
-	controls.movementSpeed = 200;
-	controls.lookSpeed = 0.06;
-	controls.activeLook = false;
+	
+	controls.enableZoom = true;
+	controls.zoomSpeed = 3;
+	controls.autoRotate = false;
 
-	interactRaycaster = new THREE.Raycaster();
+	controls.update();
 
 	// Start the scene.
 	// ----------------
@@ -190,22 +177,14 @@ function initScene() {
 			// Add the model to the scene.
 			scene.add( myDaeFile );
 
-			interactObjects.push( myDaeFile );
-
 			// Start the animations.
 			startAnimations();
 
 			// Start rendering the scene.
 			render();
+
+			sunFocus();
 		} );
-}
-
-function onMouseMove( event ) {
-
-	// Calculate mouse position in normalized device coordinates.
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
 }
 
 // Start the animations.
@@ -230,84 +209,46 @@ function loopAnimations(){
 				lastFrameCurrentTime[i] = 0;
 			}
 		}
-
 	}
+}
+
+function sunFocus() {
+
+	planet = scene.getObjectByName("Sun");
+
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	controls.autoRotate = false;
+	camera.position.x = 5000;
+}
+
+function earthFocus(){
+
+	planet = scene.getObjectByName("Earth");
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	controls.autoRotate = true;
+	camera.position.set(100,100,100);
+	controls.update();
+	console.log(camera.position.x, camera.position.y, camera.position.z);
+
 }
  
 // The game timer (aka game loop). Called x times per second.
-function render(){
+function render() {
 
-	interactRaycaster.setFromCamera( mouse, camera )
-
-	var interactIntersections = interactRaycaster.intersectObjects( interactObjects, true );
-
-	if ( interactIntersections.length > 0 ) {
-
-		// Calculate world position of objects.
-		interactIntersections[0].object.geometry.computeBoundingBox();
-
-		var boundingBox = interactIntersections[0].object.geometry.boundingBox;
-
-		var position = new THREE.Vector3();
-		position.subVectors( boundingBox.max, boundingBox.min );
-		position.multiplyScalar( 0.5 );
-		position.add( boundingBox.min );
-
-		position.applyMatrix4( interactIntersections[0].object.matrixWorld );
-
-		// Calculate distance from camera to object.
-		//if ( camera.position.distanceTo(position) <= 20 ) {
-
-			if ( INTERSECTED != interactIntersections[0].object ) {
-
-				// If intersecting with valid object, change color of material.
-				//if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-
-				INTERSECTED = interactIntersections[0].object;
-				//INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-				//INTERSECTED.material.emissive.setHex( 0xbf8200 );
-
-				debugObjectName = interactIntersections[0].object.parent.name;
-
-				objectName = interactIntersections[0].object.parent.parent.name;
-
-				objectDetails = interactIntersections[0].object.parent.parent.userData.info;
-			}
-		//} 
-	} else {
-
-		// Revert color change when no longer hovering over object.
-		if ( INTERSECTED ) {
-			//INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-		}
-		
-		INTERSECTED = null;
-		objectName = "";
-		objectDetails = "";
-
-	}
-
-	document.getElementById("debugInfo").innerHTML = "Debug info: <br>" + "<br>Name = " + debugObjectName + "<br>";
-
-	// Here we control how the camera looks around the scene.
-	controls.activeLook = false;
-	if(mouseOverCanvas){
-		if(mouseDown){
-			controls.activeLook = true;
-		}
-	}
+	controls.update();
 
 	// Get the time since this method was called.
 	var deltaTime = clock.getDelta();
 
-	// Update the controls.
-	controls.update( deltaTime );
-
 	//Debug information. This requires a div in your HTML. E.g. where id=debugInfo.
-	document.getElementById("debugInfo").innerHTML = "Debug info: <br>" + "<br>Name = " + debugObjectName +
+	/*document.getElementById("debugInfo").innerHTML = "Debug info: <br>" +
 		"<br>keyFrameAnimationsLength = " + keyFrameAnimationsLength + ".<br>" +
 		"<br>keyFrameAnimations[0] = " + keyFrameAnimations[0].currentTime + ".<br>" +
-		"<br>lastCurrentTime[0] = " + lastFrameCurrentTime[0] + ".<br>";
+		"<br>lastCurrentTime[0] = " + lastFrameCurrentTime[0] + ".<br>";*/
 	//Debug information. END.
 
 	// Update the model animations.
@@ -324,12 +265,10 @@ function render(){
 	// Render the scene.
 	renderer.render(scene, camera);
 
-	window.addEventListener( 'mousemove', onMouseMove, false );
-
 	window.addEventListener( 'resize', onWindowResize, false );
 
 	// Update the stats.s
-	stats.update();
+	//stats.update();
 
 	// Request the next frame.
 	/* The "requestAnimationFrame()" method tells the browser that you 
