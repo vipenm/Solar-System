@@ -13,7 +13,7 @@ var HEIGHT = window.innerHeight -50;
 var VIEW_ANGLE = 45;
 var ASPECT_RATIO = WIDTH / HEIGHT;
 var NEAR_CLIPPING_PLANE = 0.1;
-var FAR_CLIPPING_PLANE = 10000;
+var FAR_CLIPPING_PLANE = 50000;
 
 // Declare the variables we will need for three.js.
 var renderer;
@@ -50,8 +50,6 @@ var keyFrameAnimationsLength = 0;
 // Stores the time for the last frame. 
 // Used to control animation looping.
 var lastFrameCurrentTime = [];
-
-const description = document.querySelector("#description");
 
 // Initialise three.js.
 function init() {
@@ -110,7 +108,8 @@ function init() {
 	
 	controls.enableZoom = true;
 	controls.zoomSpeed = 3;
-	controls.autoRotate = false;
+	controls.autoRotate = true;
+	controls.maxDistance = 15000;
 
 	controls.update();
 
@@ -223,6 +222,30 @@ function sunFocus() {
 	camera.position.x = 5000;
 }
 
+function mercuryFocus(){
+
+	planet = scene.getObjectByName("Mercury");
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	controls.autoRotate = true;
+	camera.position.set(0,0,30);
+	controls.update();
+
+}
+
+function venusFocus(){
+
+	planet = scene.getObjectByName("Venus");
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	controls.autoRotate = true;
+	camera.position.set(0,0,70);
+	controls.update();
+
+}
+
 function earthFocus(){
 
 	planet = scene.getObjectByName("Earth");
@@ -230,9 +253,78 @@ function earthFocus(){
 	planet.add(camera);
 	camera.lookAt(planet);
 	controls.autoRotate = true;
-	camera.position.set(100,100,100);
+	camera.position.set(60,10,60);
 	controls.update();
-	console.log(camera.position.x, camera.position.y, camera.position.z);
+
+}
+
+function moonFocus() {
+	planet = scene.getObjectByName("Moon");
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	camera.position.set(0,0,20);
+	controls.autoRotate = true;
+
+}
+
+function marsFocus(){
+
+	planet = scene.getObjectByName("Mars");
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	controls.autoRotate = true;
+	camera.position.set(0,0,40);
+	controls.update();
+
+}
+
+function jupiterFocus(){
+
+	planet = scene.getObjectByName("Jupiter");
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	controls.autoRotate = true;
+	camera.position.set(0,0,700);
+	controls.update();
+
+}
+
+function saturnFocus(){
+
+	planet = scene.getObjectByName("Saturn");
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	controls.autoRotate = true;
+	controls.update();
+	camera.position.set(0,100,600);
+
+}
+
+function uranusFocus(){
+
+	planet = scene.getObjectByName("Uranus");
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	controls.autoRotate = true;
+	controls.update();
+	camera.position.set(0,0,300);
+
+}
+
+function neptuneFocus(){
+
+	planet = scene.getObjectByName("Neptune");
+
+	planet.add(camera);
+	camera.lookAt(planet);
+	controls.autoRotate = true;
+	controls.update();
+	camera.position.set(0,0,300);
 
 }
  
