@@ -1,5 +1,5 @@
 /*jslint browser */
-/*global THREE*/
+/*global THREE, init*/
 
 // Set the initialise function to be called when the page has loaded.
 window.onload = init;
@@ -55,6 +55,8 @@ var i;
 
 // Initialise three.js.
 function init() {
+  "use strict";
+
   // Renderer.
   // ---------
 
@@ -121,6 +123,11 @@ function init() {
 
 // Initialise the scene.
 function initScene() {
+  "use strict";
+
+  var animation;
+  var keyFrameAnimation;
+
 
   // Basic lights.
   // --------------
@@ -149,9 +156,9 @@ function initScene() {
 
     // Get all the key frame animations.
     for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
-      var animation = myDaeAnimations[ i ];
+      animation = myDaeAnimations[ i ];
 
-      var keyFrameAnimation = new THREE.KeyFrameAnimation( animation );
+      keyFrameAnimation = new THREE.KeyFrameAnimation( animation );
       keyFrameAnimation.timeScale = 1;
       keyFrameAnimation.loop = false;
       // Add the key frame animation to the keyFrameAnimations array.
@@ -173,10 +180,11 @@ function initScene() {
 
     // Add a starfield to the background of a scene
     var starsGeometry = new THREE.Geometry();
+    var star;
 
-    for ( i = 0; i < 50000; i ++ ) {
+    for ( i = 0; i < 50000; i+=1 ) {
 
-      var star = new THREE.Vector3();
+      star = new THREE.Vector3();
       star.x = THREE.Math.randFloatSpread( 10000 );
       star.y = THREE.Math.randFloatSpread( 10000 );
       star.z = THREE.Math.randFloatSpread( 10000 );
@@ -203,10 +211,14 @@ function initScene() {
 
 // Start the animations.
 function startAnimations(){
+  "use strict";
+
+  var animation;
+
   // Loop through all the animations.
   for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
     // Get a key frame animation.
-    var animation = keyFrameAnimations[i];
+    animation = keyFrameAnimations[i];
     animation.timeScale = 1;
     animation.play();
   }
@@ -214,6 +226,8 @@ function startAnimations(){
 
 // Manually loop the animations.
 function loopAnimations(){
+  "use strict";
+
   // Loop through all the animations.
   for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
     // Check if the animation is player and not paused.
@@ -229,6 +243,7 @@ function loopAnimations(){
 
 // Update descriptions of solar objects
 function updateDescription(id, diameter, mass, moons, orbitDistance, orbitPeriod, temperature, type = "planet") {
+
 
   if (type === "planet") {
     document.getElementById(id).innerHTML =
@@ -259,6 +274,7 @@ function updateDescription(id, diameter, mass, moons, orbitDistance, orbitPeriod
 // Define behaviour for focusing on solar object
 
 function sunFocus() {
+  "use strict";
 
   planet = scene.getObjectByName("Sun");
 
@@ -273,6 +289,7 @@ function sunFocus() {
 }
 
 function mercuryFocus(){
+  "use strict";
 
   planet = scene.getObjectByName("Mercury");
 
@@ -287,6 +304,7 @@ function mercuryFocus(){
 }
 
 function venusFocus(){
+  "use strict";
 
   planet = scene.getObjectByName("Venus");
 
@@ -301,6 +319,7 @@ function venusFocus(){
 }
 
 function earthFocus(){
+  "use strict";
 
   planet = scene.getObjectByName("Earth");
 
@@ -314,6 +333,8 @@ function earthFocus(){
 }
 
 function moonFocus() {
+  "use strict";
+
   planet = scene.getObjectByName("Moon");
 
   planet.add(camera);
@@ -327,6 +348,7 @@ function moonFocus() {
 }
 
 function marsFocus(){
+  "use strict";
 
   planet = scene.getObjectByName("Mars");
 
@@ -340,6 +362,7 @@ function marsFocus(){
 }
 
 function jupiterFocus(){
+  "use strict";
 
   planet = scene.getObjectByName("Jupiter");
 
@@ -354,6 +377,7 @@ function jupiterFocus(){
 }
 
 function saturnFocus(){
+  "use strict";
 
   planet = scene.getObjectByName("Saturn");
 
@@ -368,6 +392,7 @@ function saturnFocus(){
 }
 
 function uranusFocus(){
+  "use strict";
 
   planet = scene.getObjectByName("Uranus");
 
@@ -382,6 +407,7 @@ function uranusFocus(){
 }
 
 function neptuneFocus(){
+  "use strict";
 
   planet = scene.getObjectByName("Neptune");
 
@@ -397,6 +423,9 @@ function neptuneFocus(){
 
 // The game timer (aka game loop). Called x times per second.
 function render() {
+  "use strict";
+
+  var animation;
 
   controls.update();
 
@@ -413,7 +442,7 @@ function render() {
   // Update the model animations.
   for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
     // Get a key frame animation.
-    var animation = keyFrameAnimations[i];
+    animation = keyFrameAnimations[i];
     animation.update( deltaTime );
   }
 
@@ -444,6 +473,7 @@ function render() {
 
 // Allow window resizing
 function onWindowResize(){
+  "use strict";
 
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
