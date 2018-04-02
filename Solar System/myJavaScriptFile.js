@@ -6,8 +6,8 @@
 window.onload = init;
 
 // set the size of our canvas / view onto the scene.
-var WIDTH = window.innerWidth - 50;
-var HEIGHT = window.innerHeight -50;
+var WIDTH = window.innerWidth;
+var HEIGHT = window.innerHeight;
 
 // set camera properties / attributes.
 var VIEW_ANGLE = 45;
@@ -50,6 +50,7 @@ var keyFrameAnimationsLength = 0;
 // Stores the time for the last frame. 
 // Used to control animation looping.
 var lastFrameCurrentTime = [];
+var descriptionText;
 
 // Initialise three.js.
 function init() {
@@ -125,14 +126,9 @@ function init() {
 function initScene() {
 
 	// Basic lights.
-	// --------------
+	// --------------	
 
-	var light = new THREE.DirectionalLight( 0xffffff, 1.5 );
-	light.position.set( 1, 1, 1 );
-	scene.add( light );
-
-	var light = new THREE.DirectionalLight( 0xffffff, 0.75 );
-	light.position.set( -1, - 0.5, -1 );
+	var light = new THREE.AmbientLight( 0x404040, 3.5 ); // soft white light
 	scene.add( light );
 
 	// Add a model to the scene.
@@ -141,49 +137,69 @@ function initScene() {
 	myColladaLoader.options.convertUpAxis = true;
 
 	myColladaLoader.load( 'test.dae', function ( collada ) {
-			// Here we store the dae in a global variable.
-			myDaeFile = collada.scene;
-			
-			// Store the animations.
-			myDaeAnimations = collada.animations;
-			// Store the number of animations.
-			keyFrameAnimationsLength = myDaeAnimations.length;
+		// Here we store the dae in a global variable.
+		myDaeFile = collada.scene;
+		
+		// Store the animations.
+		myDaeAnimations = collada.animations;
+		// Store the number of animations.
+		keyFrameAnimationsLength = myDaeAnimations.length;
 
-		    // Initialise last frame current time.
-		    for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
-		    	lastFrameCurrentTime[i] = 0;
-		    }
+	    // Initialise last frame current time.
+	    for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
+	    	lastFrameCurrentTime[i] = 0;
+	    }
 
-			// Get all the key frame animations.
-			for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
-				var animation = myDaeAnimations[ i ];
+		// Get all the key frame animations.
+		for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
+			var animation = myDaeAnimations[ i ];
 
-				var keyFrameAnimation = new THREE.KeyFrameAnimation( animation );
-				keyFrameAnimation.timeScale = 1;
-				keyFrameAnimation.loop = false;
-				// Add the key frame animation to the keyFrameAnimations array.
-				keyFrameAnimations.push( keyFrameAnimation );
-			}
+			var keyFrameAnimation = new THREE.KeyFrameAnimation( animation );
+			keyFrameAnimation.timeScale = 1;
+			keyFrameAnimation.loop = false;
+			// Add the key frame animation to the keyFrameAnimations array.
+			keyFrameAnimations.push( keyFrameAnimation );
+		}
 
-			// Scale your model to the correct size.
-			myDaeFile.position.x = 100;
-			myDaeFile.position.y = 3;
-			myDaeFile.position.z = 30;
+		// Scale your model to the correct size.
+		myDaeFile.position.x = 100;
+		myDaeFile.position.y = 3;
+		myDaeFile.position.z = 30;
 
-			myDaeFile.scale.x = myDaeFile.scale.y = myDaeFile.scale.z = 0.1;
-			myDaeFile.updateMatrix();
+		myDaeFile.scale.x = myDaeFile.scale.y = myDaeFile.scale.z = 0.1;
+		myDaeFile.updateMatrix();
 
-			// Add the model to the scene.
-			scene.add( myDaeFile );
+		// Add the model to the scene.
+		scene.add( myDaeFile );
 
-			// Start the animations.
-			startAnimations();
+		//This will add a starfield to the background of a scene
+		var starsGeometry = new THREE.Geometry();
 
-			// Start rendering the scene.
-			render();
+		for ( var i = 0; i < 50000; i ++ ) {
 
-			sunFocus();
-		} );
+			var star = new THREE.Vector3();
+			star.x = THREE.Math.randFloatSpread( 10000 );
+			star.y = THREE.Math.randFloatSpread( 10000 );
+			star.z = THREE.Math.randFloatSpread( 10000 );
+
+			starsGeometry.vertices.push( star );
+
+		}
+
+		var starsMaterial = new THREE.PointsMaterial( { color: 0x888888 } );
+
+		var starField = new THREE.Points( starsGeometry, starsMaterial );
+
+		scene.add( starField );
+
+		// Start the animations.
+		startAnimations();
+
+		// Start rendering the scene.
+		render();
+
+		sunFocus();
+	} );
 }
 
 // Start the animations.
@@ -192,6 +208,7 @@ function startAnimations(){
 	for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
 		// Get a key frame animation.
 		var animation = keyFrameAnimations[i];
+		animation.timeScale = 1;
 		animation.play();
 	}
 }
@@ -211,15 +228,46 @@ function loopAnimations(){
 	}
 }
 
+function updateDescription(id, diameter, mass, moons, orbitDistance, orbitPeriod, temperature, type = "planet") {
+	
+	if (type === "planet") {
+		document.getElementById(id).innerHTML = 
+		"Diameter: " + diameter 
+		+ "<br> Mass: " + mass
+		+ "<br> Moons: " + moons
+		+ "<br> Orbit Distance: " + orbitDistance
+		+ "<br> Orbit Period: " + orbitPeriod
+		+ "<br> Temperature: " + temperature;
+	} else if (type === "sun") {
+		document.getElementById(id).innerHTML = 
+		"Age: 4.6 Billion Years"
+		+ "<br> Diameter: " + diameter 
+		+ "<br> Mass: " + mass
+		+ "<br> Temperature: " + temperature;
+	} else if (type === "moon") {
+		document.getElementById(id).innerHTML = 
+		"Diameter: " + diameter 
+		+ "<br> Mass: " + mass
+		+ "<br> Orbits: The Earth"
+		+ "<br> Orbit Distance: " + orbitDistance
+		+ "<br> Orbit Period: " + orbitPeriod
+		+ "<br> Temperature: " + temperature;
+	}
+	
+}
+
 function sunFocus() {
 
 	planet = scene.getObjectByName("Sun");
-
 
 	planet.add(camera);
 	camera.lookAt(planet);
 	controls.autoRotate = false;
 	camera.position.x = 5000;
+	controls.update();
+
+	updateDescription("sunText", "1,392,684 km", "1.99 × 10^30 kg", null, null, null, "5,500°C", "sun")
+
 }
 
 function mercuryFocus(){
@@ -231,6 +279,8 @@ function mercuryFocus(){
 	controls.autoRotate = true;
 	camera.position.set(0,0,30);
 	controls.update();
+
+	updateDescription("mercuryText", "4,879 km", "3.30 x 10^23 kg", "0", "57,909,227 km (0.39 AU)", "88 days (0.24 years)", "-173 to 427°C");
 
 }
 
@@ -244,6 +294,8 @@ function venusFocus(){
 	camera.position.set(0,0,70);
 	controls.update();
 
+	updateDescription("venusText", "12,104 km", "4.87 x 10^24 kg", "0", "108,209,475 km (0.73 AU)", "225 days (0.62 years)", "462°C");
+
 }
 
 function earthFocus(){
@@ -255,6 +307,7 @@ function earthFocus(){
 	controls.autoRotate = true;
 	camera.position.set(60,10,60);
 	controls.update();
+	updateDescription("earthText", "12,756 km", "5.97 x 10^24 kg", "1", "149,598,262 km (1 AU)", "365.24 Days (1 year)", "-88 to 58°C");
 
 }
 
@@ -265,6 +318,9 @@ function moonFocus() {
 	camera.lookAt(planet);
 	camera.position.set(0,0,20);
 	controls.autoRotate = true;
+	controls.update();
+
+	updateDescription("moonText", "3,475 km", "7.35 × 10^22 kg", null, "384,400 km", "27.3 days", "-233 to 123°C", "moon");
 
 }
 
@@ -277,6 +333,7 @@ function marsFocus(){
 	controls.autoRotate = true;
 	camera.position.set(0,0,40);
 	controls.update();
+	updateDescription("marsText", "6792 km", "6.42 x 10^23 kg", "2", "227,943,824 km (1.52 AU)", "687 days (1.9 years)", "-153 to 20°C");
 
 }
 
@@ -290,6 +347,8 @@ function jupiterFocus(){
 	camera.position.set(0,0,700);
 	controls.update();
 
+	updateDescription("jupiterText", "142,984 km", "1.90 × 10^27 kg", "67", "778,340,821 km (5.20 AU)", "4,333 days (11.9 years)", "-148°C");
+
 }
 
 function saturnFocus(){
@@ -299,8 +358,10 @@ function saturnFocus(){
 	planet.add(camera);
 	camera.lookAt(planet);
 	controls.autoRotate = true;
-	controls.update();
 	camera.position.set(0,100,600);
+	controls.update();
+
+	updateDescription("saturnText", "120,536 km", "5.68 × 10^26 kg", "62", "1,426,666,422 km (9.54 AU)", "10,756 days (29.5 years)", "-178°C");
 
 }
 
@@ -311,8 +372,10 @@ function uranusFocus(){
 	planet.add(camera);
 	camera.lookAt(planet);
 	controls.autoRotate = true;
-	controls.update();
 	camera.position.set(0,0,300);
+	controls.update();
+
+	updateDescription("uranusText", "51,118 km", "8.68 × 10^25 kg", "27", "2,870,658,186 km (19.19 AU)", "30,687 days (84.0 years)", "-216°C");
 
 }
 
@@ -323,8 +386,10 @@ function neptuneFocus(){
 	planet.add(camera);
 	camera.lookAt(planet);
 	controls.autoRotate = true;
-	controls.update();
 	camera.position.set(0,0,300);
+	controls.update();
+
+	updateDescription("neptuneText", "49,528 km", "1.02 × 10^26 kg", "14", "4,498,396,441 km (30.10 AU)", "60,190 days (164.8 years)", "-214°C");
 
 }
  

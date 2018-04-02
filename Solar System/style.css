@@ -6,11 +6,11 @@
     margin-left: 15px;
     margin-top: 15px;
     padding: 1em;
-    width: 200px;
+    width: 300px;
     color: #fff;
     background: rgba(0, 0, 0, 0.8);
     border-radius: .5em;
-    font-size: 12px;
+    font-size: 15px;
     line-height: 1.2;
     transition: opacity .5s;
     &::before {
