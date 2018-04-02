@@ -1,3 +1,6 @@
+/*jslint browser */
+/*global THREE*/
+
 // Set the initialise function to be called when the page has loaded.
 window.onload = init;
 
@@ -47,6 +50,8 @@ var keyFrameAnimationsLength = 0;
 // Used to control animation looping.
 var lastFrameCurrentTime = [];
 var descriptionText;
+
+var i;
 
 // Initialise three.js.
 function init() {
@@ -138,12 +143,12 @@ function initScene() {
     keyFrameAnimationsLength = myDaeAnimations.length;
 
       // Initialise last frame current time.
-      for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
+      for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
         lastFrameCurrentTime[i] = 0;
       }
 
     // Get all the key frame animations.
-    for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
+    for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
       var animation = myDaeAnimations[ i ];
 
       var keyFrameAnimation = new THREE.KeyFrameAnimation( animation );
@@ -158,7 +163,9 @@ function initScene() {
     myDaeFile.position.y = 3;
     myDaeFile.position.z = 30;
 
-    myDaeFile.scale.x = myDaeFile.scale.y = myDaeFile.scale.z = 0.1;
+    myDaeFile.scale.x = 0.1;
+    myDaeFile.scale.y = 0.1;
+    myDaeFile.scale.z = 0.1;
     myDaeFile.updateMatrix();
 
     // Add the model to the scene.
@@ -167,7 +174,7 @@ function initScene() {
     // Add a starfield to the background of a scene
     var starsGeometry = new THREE.Geometry();
 
-    for ( var i = 0; i < 50000; i ++ ) {
+    for ( i = 0; i < 50000; i ++ ) {
 
       var star = new THREE.Vector3();
       star.x = THREE.Math.randFloatSpread( 10000 );
@@ -197,7 +204,7 @@ function initScene() {
 // Start the animations.
 function startAnimations(){
   // Loop through all the animations.
-  for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
+  for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
     // Get a key frame animation.
     var animation = keyFrameAnimations[i];
     animation.timeScale = 1;
@@ -208,10 +215,10 @@ function startAnimations(){
 // Manually loop the animations.
 function loopAnimations(){
   // Loop through all the animations.
-  for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
+  for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
     // Check if the animation is player and not paused.
     if(keyFrameAnimations[i].isPlaying && !keyFrameAnimations[i].isPaused){
-      if(keyFrameAnimations[i].currentTime == lastFrameCurrentTime[i]) {
+      if(keyFrameAnimations[i].currentTime === lastFrameCurrentTime[i]) {
         keyFrameAnimations[i].stop();
         keyFrameAnimations[i].play();
         lastFrameCurrentTime[i] = 0;
@@ -261,7 +268,7 @@ function sunFocus() {
   camera.position.x = 5000;
   controls.update();
 
-  updateDescription("sunText", "1,392,684 km", "1.99 × 10^30 kg", null, null, null, "5,500°C", "sun")
+  updateDescription("sunText", "1,392,684 km", "1.99 × 10^30 kg", null, null, null, "5,500°C", "sun");
 
 }
 
@@ -404,7 +411,7 @@ function render() {
   //Debug information. END.
 
   // Update the model animations.
-  for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
+  for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
     // Get a key frame animation.
     var animation = keyFrameAnimations[i];
     animation.update( deltaTime );
@@ -430,7 +437,7 @@ function render() {
     requestAnimationFrame(render);
 
     // Update last frame current time.
-    for ( var i = 0; i < keyFrameAnimationsLength; i++ ) {
+    for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
       lastFrameCurrentTime[i] = keyFrameAnimations[i].currentTime;
     }
 }
