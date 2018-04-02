@@ -100,10 +100,6 @@ function init() {
 	camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT_RATIO, 
 								NEAR_CLIPPING_PLANE, FAR_CLIPPING_PLANE);
 	
-	// Set the position of the camera.
-
-	//camera.position.set(-150, 0, -40);
-
 	controls = new THREE.OrbitControls( camera, 
 									document.getElementById('myDivContainer') );
 	
@@ -128,7 +124,7 @@ function initScene() {
 	// Basic lights.
 	// --------------	
 
-	var light = new THREE.AmbientLight( 0x404040, 3.5 ); // soft white light
+	var light = new THREE.AmbientLight( 0x404040, 3.25 ); // soft white light
 	scene.add( light );
 
 	// Add a model to the scene.
@@ -136,7 +132,7 @@ function initScene() {
 	myColladaLoader = new THREE.ColladaLoader();
 	myColladaLoader.options.convertUpAxis = true;
 
-	myColladaLoader.load( 'test.dae', function ( collada ) {
+	myColladaLoader.load( 'scene.dae', function ( collada ) {
 		// Here we store the dae in a global variable.
 		myDaeFile = collada.scene;
 		
@@ -172,7 +168,7 @@ function initScene() {
 		// Add the model to the scene.
 		scene.add( myDaeFile );
 
-		//This will add a starfield to the background of a scene
+		// Add a starfield to the background of a scene
 		var starsGeometry = new THREE.Geometry();
 
 		for ( var i = 0; i < 50000; i ++ ) {
@@ -228,6 +224,7 @@ function loopAnimations(){
 	}
 }
 
+// Update descriptions of solar objects
 function updateDescription(id, diameter, mass, moons, orbitDistance, orbitPeriod, temperature, type = "planet") {
 	
 	if (type === "planet") {
@@ -255,6 +252,8 @@ function updateDescription(id, diameter, mass, moons, orbitDistance, orbitPeriod
 	}
 	
 }
+
+// Define behaviour for focusing on solar object
 
 function sunFocus() {
 

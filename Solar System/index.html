@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+    	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+
+		<title>Solar System</title>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		
+		<script type="text/javascript" src="three.min.js"></script>
+		<script type="text/javascript" src="stats.min.js"></script>
+		<script type="text/javascript" src="OrbitControls.js"></script>
+		<script src="Animation.js"></script>
+		<script src="AnimationHandler.js"></script>
+		<script src="KeyFrameAnimation.js"></script>
+		<script type="text/javascript" src="ColladaLoader.js"></script>
+		<script type="text/javascript" src="script.js"></script>
+
+	</head>
+
+	<body bgcolor="White">
+		
+		<div id="myDivContainer" style="position: absolute; top: 10px; left: 10px;"></div> 
+
+		<div id="accordion" style="width: 20%; padding-top: 1%; padding-left: 1%">
+		  <div class="card">
+		    <div class="card-header text-center" id="headingOne">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick="sunFocus()">
+		          Sun
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseOne" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+		      <div class="card-body" id="sunText"></div>
+		    </div>
+		  </div>
+
+		  <div class="card">
+		    <div class="card-header text-center" id="headingTwo">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick="mercuryFocus()">
+		          Mercury
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+		      <div class="card-body" id="mercuryText"></div>
+		    </div>
+		  </div>
+
+		  <div class="card">
+		    <div class="card-header text-center" id="headingThree">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick="venusFocus()">
+		          Venus
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+		      <div class="card-body" id="venusText"></div>
+		    </div>
+		  </div>
+
+		  <div class="card">
+		    <div class="card-header text-center" id="headingFour">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick="earthFocus()">
+		          Earth
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+		      <div class="card-body" id="earthText"></div>
+		    </div>
+		  </div>
+
+		  <div class="card">
+		    <div class="card-header text-center" id="headingFive">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick="moonFocus()">
+		          Moon
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+		      <div class="card-body" id="moonText"></div>
+		    </div>
+		  </div>
+
+		  <div class="card">
+		    <div class="card-header text-center" id="headingSix">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick="marsFocus()">
+		          Mars
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+		      <div class="card-body" id="marsText"></div>
+		    </div>
+		  </div>
+
+		  <div class="card">
+		    <div class="card-header text-center" id="headingSeven">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick="jupiterFocus()">
+		          Jupiter
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordion">
+		      <div class="card-body" id="jupiterText"></div>
+		    </div>
+		  </div>
+
+		  <div class="card">
+		    <div class="card-header text-center" id="headingEight">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight" onclick="saturnFocus()">
+		          Saturn
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordion">
+		      <div class="card-body" id="saturnText"></div>
+		    </div>
+		  </div>
+
+		  <div class="card">
+		    <div class="card-header text-center" id="headingNine">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick="uranusFocus()">
+		          Uranus
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#accordion">
+		      <div class="card-body" id="uranusText"></div>
+		    </div>
+		  </div>
+
+		  <div class="card">
+		    <div class="card-header text-center" id="headingTen">
+		      <h5 class="mb-0">
+		        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen" onclick="neptuneFocus()">
+		          Neptune
+		        </button>
+		      </h5>
+		    </div>
+		    <div id="collapseTen" class="collapse" aria-labelledby="headingTen" data-parent="#accordion">
+		      <div class="card-body" id="neptuneText"></div>
+		    </div>
+		  </div>
+		</div>
+
+	</body>
+</html> 

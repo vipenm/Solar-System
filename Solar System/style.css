@@ -1,30 +1,16 @@
-#description {
-	position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    margin-left: 15px;
-    margin-top: 15px;
-    padding: 1em;
-    width: 300px;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: .5em;
-    font-size: 15px;
-    line-height: 1.2;
-    transition: opacity .5s;
-    &::before {
-        content: '1';
-        position: absolute;
-        top: -30px;
-        left: -30px;
-        width: 30px;
-        height: 30px;
-        border: 2px solid #fff;
-        border-radius: 50%;
-        font-size: 16px;
-        line-height: 30px;
-        text-align: center;
-        background: rgba(0, 0, 0, 0.8);
-    }
+.card {
+    background-color: #323438;
+    color: white;
+}
+
+.btn-link {
+    color: white;
+}
+
+.btn-link:hover {
+    color: #6e7177;
+}
+
+.btn-link:active {
+    text-decoration: underline;
 }
