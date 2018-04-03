@@ -325,7 +325,7 @@ function startAnimations() {
         item = item;
         array = array;
         animation = keyFrameAnimations[index];
-        animation.timeScale = 1;
+        animation.timeScale = 0.25;
         animation.play();
     }
 
