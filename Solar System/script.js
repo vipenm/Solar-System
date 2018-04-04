@@ -254,7 +254,6 @@ function loopAnimations() {
                 keyFrameAnimations[index].stop();
                 keyFrameAnimations[index].play();
                 lastFrameCurrentTime[index] = 0;
-                //window.alert("LOOP");
             }
         }
     }
@@ -368,11 +367,6 @@ function initScene() {
 
         myDaeAnimations.forEach(resetCurrentTime);
 
-            // Initialise last frame current time.
-         /* for ( i = 0; i < keyFrameAnimationsLength; i+=1 ) {
-                lastFrameCurrentTime[i] = 0;
-            }*/
-
         // Get all the keyframe animations
         function getAnimations(item, index, array) {
             item = item;
@@ -380,7 +374,6 @@ function initScene() {
             animation = myDaeAnimations[index];
 
             keyFrameAnimation = new THREE.KeyFrameAnimation(animation);
-            keyFrameAnimation.timeScale = 10;
             keyFrameAnimation.loop = false;
             // Add the key frame animation to the keyFrameAnimations array.
             keyFrameAnimations.push(keyFrameAnimation);
