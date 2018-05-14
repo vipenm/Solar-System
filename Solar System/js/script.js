@@ -350,7 +350,7 @@ function initScene() {
     myColladaLoader = new THREE.ColladaLoader();
     myColladaLoader.options.convertUpAxis = true;
 
-    myColladaLoader.load("scene.dae", function (collada) {
+    myColladaLoader.load("assets/scene.dae", function (collada) {
         // Here we store the dae in a global variable.
         myDaeFile = collada.scene;
 
